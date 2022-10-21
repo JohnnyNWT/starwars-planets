@@ -1,27 +1,35 @@
+import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useEffect, useMemo, useState } from 'react';
+
 import AppContext from './AppContext';
 
 const ENDPOINT = 'https://swapi.dev/api/planets';
 
-export default function AppProvider({ children }) {
-  const [fetchResults, setFetchResults] = useState([]);
+function AppProvider({ children }) {
+  const [fetchResults, setResults] = useState([]);
+  const [filterPlanets, setFilterPlanets] = useState('');
+
+  const handleChangeName = ({ target }) => {
+    setFilterPlanets(target.value);
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      const data = await fetch(ENDPOINT);
-      const { results } = await data.json();
-      setFetchResults(results.map((element) => {
+    const getFetchData = async () => {
+      const response = await fetch(ENDPOINT);
+      const { results } = await response.json();
+      setResults(results.map((element) => {
         delete element.residents;
         return element;
       }));
     };
-    fetchData();
+    getFetchData();
   }, []);
 
   const value = useMemo(() => ({
+    filterPlanets,
     fetchResults,
-  }), [fetchResults]);
+    handleChangeName,
+  }), [fetchResults, filterPlanets]);
 
   return (
     <AppContext.Provider value={ value }>
@@ -33,3 +41,5 @@ export default function AppProvider({ children }) {
 AppProvider.propTypes = {
   children: PropTypes.node,
 }.isRequired;
+
+export default AppProvider;

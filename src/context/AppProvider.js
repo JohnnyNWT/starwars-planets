@@ -8,9 +8,42 @@ const ENDPOINT = 'https://swapi.dev/api/planets';
 function AppProvider({ children }) {
   const [fetchResults, setResults] = useState([]);
   const [filterPlanets, setFilterPlanets] = useState('');
+  const [firstFilter, setFirstFilter] = useState('population');
+  const [secondFilter, setSecondFilter] = useState('maior que');
+  const [inputNumber, setInputNumber] = useState(0);
 
   const handleChangeName = ({ target }) => {
-    setFilterPlanets(target.value);
+    const { value } = target;
+    setFilterPlanets(value);
+  };
+
+  const handleFirstFilter = ({ target }) => {
+    const { value } = target;
+    setFirstFilter(value);
+  };
+
+  const handleSecondFilter = ({ target }) => {
+    const { value } = target;
+    setSecondFilter(value);
+  };
+
+  const handleInputNumber = ({ target }) => {
+    const { value } = target;
+    setInputNumber(value);
+  };
+
+  const handleClickFilter = () => {
+    const filter = fetchResults.filter((element) => {
+      switch (secondFilter) {
+      case 'maior que':
+        return Number(element[firstFilter]) > Number(inputNumber);
+      case 'menor que':
+        return Number(element[firstFilter]) < Number(inputNumber);
+      default:
+        return Number(element[firstFilter]) === Number(inputNumber);
+      }
+    });
+    setResults(filter);
   };
 
   useEffect(() => {
@@ -28,8 +61,15 @@ function AppProvider({ children }) {
   const value = useMemo(() => ({
     filterPlanets,
     fetchResults,
+    firstFilter,
+    secondFilter,
+    inputNumber,
+    handleFirstFilter,
+    handleSecondFilter,
+    handleInputNumber,
     handleChangeName,
-  }), [fetchResults, filterPlanets]);
+    handleClickFilter,
+  }), [fetchResults, filterPlanets, firstFilter, secondFilter, inputNumber]);
 
   return (
     <AppContext.Provider value={ value }>

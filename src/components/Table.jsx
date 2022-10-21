@@ -1,18 +1,11 @@
 import React, { useContext } from 'react';
 import AppContext from '../context/AppContext';
 
-export default function Table() {
-  const { fetchResults, filterPlanets, handleChangeName } = useContext(AppContext);
+function Table() {
+  const { fetchResults, filterPlanets } = useContext(AppContext);
   // console.log(fetchResults);
   return (
     <div>
-      <label htmlFor="filter-planets-name">
-        <input
-          name="filter"
-          data-testid="name-filter"
-          onChange={ handleChangeName }
-        />
-      </label>
       <table>
         <thead>
           <tr>
@@ -102,3 +95,5 @@ export default function Table() {
     </div>
   );
 }
+
+export default Table;

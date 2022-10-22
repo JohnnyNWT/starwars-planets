@@ -9,6 +9,7 @@ function Filters() {
     handleInputNumber,
     handleClickFilter,
     inputNumber,
+    removeFilter,
   } = useContext(AppContext);
   return (
     <form>
@@ -19,16 +20,11 @@ function Filters() {
           onChange={ handleFirstFilter }
         >
           {
-            ['population',
-              'orbital_period',
-              'diameter',
-              'rotation_period',
-              'surface_water']
-              .map((element, index) => (
-                <option key={ index }>
-                  { element }
-                </option>
-              ))
+            removeFilter.map((element, index) => (
+              <option key={ index }>
+                { element }
+              </option>
+            ))
           }
           ;
         </select>

@@ -6,11 +6,17 @@ import AppContext from './AppContext';
 const ENDPOINT = 'https://swapi.dev/api/planets';
 
 function AppProvider({ children }) {
+  const setFilterRemoveArr = ['population',
+    'orbital_period',
+    'diameter',
+    'rotation_period',
+    'surface_water'];
   const [fetchResults, setResults] = useState([]);
   const [filterPlanets, setFilterPlanets] = useState('');
   const [firstFilter, setFirstFilter] = useState('population');
   const [secondFilter, setSecondFilter] = useState('maior que');
   const [inputNumber, setInputNumber] = useState(0);
+  const [removeFilter, setFilterRemove] = useState([...setFilterRemoveArr]);
 
   const handleChangeName = ({ target }) => {
     const { value } = target;
@@ -43,6 +49,9 @@ function AppProvider({ children }) {
         return Number(element[firstFilter]) === Number(inputNumber);
       }
     });
+    const filterRemove = removeFilter.filter((e) => e !== firstFilter);
+    setFilterRemove(filterRemove);
+    setFirstFilter(filterRemove[0]);
     setResults(filter);
   };
 
@@ -64,12 +73,19 @@ function AppProvider({ children }) {
     firstFilter,
     secondFilter,
     inputNumber,
+    removeFilter,
     handleFirstFilter,
     handleSecondFilter,
     handleInputNumber,
     handleChangeName,
     handleClickFilter,
-  }), [fetchResults, filterPlanets, firstFilter, secondFilter, inputNumber]);
+    setFilterRemove,
+  }), [fetchResults,
+    filterPlanets,
+    firstFilter,
+    secondFilter,
+    inputNumber,
+    removeFilter]);
 
   return (
     <AppContext.Provider value={ value }>

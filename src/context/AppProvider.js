@@ -17,6 +17,8 @@ function AppProvider({ children }) {
   const [secondFilter, setSecondFilter] = useState('maior que');
   const [inputNumber, setInputNumber] = useState(0);
   const [removeFilter, setFilterRemove] = useState([...setFilterRemoveArr]);
+  const [alteredFilter, setAlteredFilter] = useState([]);
+  const [receiveResult, setReceiveResult] = useState([]);
 
   const handleChangeName = ({ target }) => {
     const { value } = target;
@@ -38,6 +40,46 @@ function AppProvider({ children }) {
     setInputNumber(value);
   };
 
+  const filteredRemove = (i) => {
+    const arr = [];
+    const filter = alteredFilter.filter((e) => i.column !== e.column);
+    setAlteredFilter(filter);
+
+    const mapFilter = filter.map((element) => {
+      const moreFilter = receiveResult.filter((remove) => {
+        switch (element.comparison) {
+        case 'maior que':
+          return Number(remove[element.column]) > Number(element.value);
+        case 'menor que':
+          return Number(remove[element.column]) < Number(element.value);
+        default:
+          return Number(remove[element.column]) === Number(element.value);
+        }
+      });
+      return moreFilter;
+    });
+    setFilterRemove((prevState) => [i.column, ...prevState]);
+    mapFilter.forEach((e) => arr.push(...e));
+    if (arr.length > 0) {
+      setResults(arr);
+    } else {
+      setResults(receiveResult);
+      setAlteredFilter([]);
+    }
+  };
+
+  const renderFilter = () => {
+    const mapOptions = {
+      column: firstFilter,
+      comparison: secondFilter,
+      value: inputNumber,
+    };
+    setAlteredFilter((prevState) => ([
+      ...prevState,
+      mapOptions,
+    ]));
+  };
+
   const handleClickFilter = () => {
     const filter = fetchResults.filter((element) => {
       switch (secondFilter) {
@@ -53,12 +95,14 @@ function AppProvider({ children }) {
     setFilterRemove(filterRemove);
     setFirstFilter(filterRemove[0]);
     setResults(filter);
+    renderFilter();
   };
 
   useEffect(() => {
     const getFetchData = async () => {
       const response = await fetch(ENDPOINT);
       const { results } = await response.json();
+      setReceiveResult(results);
       setResults(results.map((element) => {
         delete element.residents;
         return element;
@@ -74,18 +118,25 @@ function AppProvider({ children }) {
     secondFilter,
     inputNumber,
     removeFilter,
+    alteredFilter,
+    receiveResult,
     handleFirstFilter,
     handleSecondFilter,
     handleInputNumber,
     handleChangeName,
     handleClickFilter,
     setFilterRemove,
+    setAlteredFilter,
+    setReceiveResult,
+    filteredRemove,
+    setResults,
   }), [fetchResults,
     filterPlanets,
     firstFilter,
     secondFilter,
     inputNumber,
-    removeFilter]);
+    removeFilter,
+    receiveResult]);
 
   return (
     <AppContext.Provider value={ value }>

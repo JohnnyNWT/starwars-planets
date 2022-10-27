@@ -67,7 +67,7 @@ function Filters() {
 
       <div>
         {
-          alteredFilter.map((e) => (
+          alteredFilter.map((e, index) => (
             <div key={ e.column } data-testid="filter">
               <span>
                 {' '}
@@ -81,7 +81,13 @@ function Filters() {
                 {' '}
                 {e.value}
               </span>
-              <button type="button" onClick={ () => filteredRemove(e) }>X</button>
+              <button
+                type="button"
+                data-testid={ `remove-filter-${index}` }
+                onClick={ () => filteredRemove(e) }
+              >
+                X
+              </button>
             </div>
           ))
         }

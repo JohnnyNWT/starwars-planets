@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import AppProvider from '../context/AppProvider';
+import AppProvider from '../context/AppProvider'
 
 export default function renderWithContext(children) {
   return (

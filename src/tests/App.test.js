@@ -1,13 +1,15 @@
 import React from 'react';
-import { screen, waitFor } from '@testing-library/react';
-import App from '../App';
-import testData from '../../cypress/mocks/testData';
 import userEvent from '@testing-library/user-event';
-import renderWithContext from './renderWith';
-import { act } from 'react-dom/test-utils';
+import { render, screen, waitFor } from '@testing-library/react';
+import App from '../App';
+import mockFetch from '../../cypress/mocks/fetch';
+import { act } from 'react-dom/test-utils'
+import testData from '../../cypress/mocks/testData';
+import renderWithContext from './renderWithContext'
 
-describe('Testando componente Star Wars', () => {
-  it('testando chamada da api', async () => {
+describe('Testes do projeto Star Wars', () => {
+
+  it('Testa chamada de API', async () => {
     global.fetch = jest.fn().mockResolvedValue({
       json: jest.fn().mockResolvedValue(testData),
     });
@@ -30,7 +32,8 @@ describe('Testando componente Star Wars', () => {
     const searchPlan = await screen.findByRole('cell', { name: /alderaan/i })
     expect(searchPlan).toBeInTheDocument();
   })
-  it('testando os outros casos do selected', async () => {
+
+  it('Testando os outros casos do selected', async () => {
     global.fetch = jest.fn().mockResolvedValue({
       json: jest.fn().mockResolvedValue(testData),
     });
@@ -53,6 +56,7 @@ describe('Testando componente Star Wars', () => {
     const coruscant = await screen.findByRole('cell', { name: /coruscant/i })
     expect(coruscant).toBeDefined();
   })
+
   it('testando os outros casos do selected', async () => {
     global.fetch = jest.fn().mockResolvedValue({
       json: jest.fn().mockResolvedValue(testData),
@@ -76,6 +80,7 @@ describe('Testando componente Star Wars', () => {
     const coruscant = await screen.findByRole('cell', { name: /tatooine/i })
     expect(coruscant).toBeDefined();
   })
+
   it('testando novas funções', async () => {
     global.fetch = jest.fn().mockResolvedValue({
       json: jest.fn().mockResolvedValue(testData),

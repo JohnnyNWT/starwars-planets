@@ -5,10 +5,8 @@ import App from '../App';
 import { act } from 'react-dom/test-utils'
 import testData from '../../cypress/mocks/testData';
 import renderWithContext from './renderWithContext'
-
 describe('Testes do projeto Star Wars', () => {
-
-  it('testando rederizando os planetas', async () => {
+  it('Testando rederizando os planetas', async () => {
     global.fetch = jest.fn().mockResolvedValue({
       json: jest.fn().mockResolvedValue(testData),
     });
